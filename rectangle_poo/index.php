@@ -45,13 +45,15 @@ $largeur="";
 
 //Ouvrir session_start()
    session_start();
+   
+
    if(!isset($_SESSION['id'])){
     $_SESSION['id']=0;
    }
 
    ///session_destroy();
 
-    if( isset($_POST['btn_submit'])){
+    if(isset($_POST['btn_submit'])){
 
         if($_POST['btn_submit']==="calcul"){
 
@@ -90,6 +92,8 @@ $largeur="";
             }
 
         }else{
+            
+            //unset($rectangle);
             session_destroy();
         }
     }
@@ -98,7 +102,7 @@ $largeur="";
  ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <title>Title</title>
     <!-- Required meta tags -->

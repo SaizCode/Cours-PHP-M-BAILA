@@ -5,8 +5,13 @@
 <?php
 require_once("./helpers/fonctions.php");
 require_once("./controllers/base.php");
+
+
 $errors=[];
-$resultat="";
+$resultat= 0;
+
+
+
     if(isset($_POST['btn_submit'])){
         //Alternances
  //1-Champs vides
@@ -14,26 +19,70 @@ $resultat="";
         define("NBRE2","nbre2");
         //PI=3.14
         define('PI',3.14);
+        
 
-        $errors[]=isEmpty($_POST[NBRE1]);
-        $errors[]=isEmpty($_POST[NBRE2],"Nombre2 Obligatoire");
-        $errors[]=isEmpty($_POST['op'],"Veuillez Selectionner un Operateur");
+        $errors["nbre1"] = null;
+        $errors["nbre2"] = null;
+        $errors["op"] = null;
         //2-Pas Numerique
-        $errors[]=isNumeric($_POST[NBRE1]);
-        $errors[]=isNumeric($_POST[NBRE2]);
+    
+        $errors["nbre2"] = isNumeric($_POST[NBRE2]);
+
+        foreach ($errors as $key => $value) {
+
+            switch ($key) {
+
+              case 'nbre1':
+
+                        if($nbre1 = isEmpty($_POST[NBRE1])){
+
+                              $errors["nbre1"] = $nbre1;
+                        
+                        }
+                        elseif($nbre1 = isNumeric($_POST[NBRE1])){
+
+                              $errors["nbre1"] = $nbre1;
+                        }
+
+                break;
+              case 'nbre2':
+                      
+                      if($nbre2 = isEmpty($_POST[NBRE2])){
+
+                            $errors["nbre2"] = $nbre2;
+                        
+                      }
+                      elseif($nbre2 = isNumeric($_POST[NBRE2])){
+
+                            $errors["nbre2"] = $nbre2;
+                      }
+
+                      
+                break;
+              
+              default:
+                        $errors["op"] = isEmpty($_POST['op'],"Veuillez Selectionner un Operateur");
+                break;
+            }
+        }
+
+  
         //Nominal
-        if(count($errors)==0){
+        if(!isErrors($errors)){
+
             $nbre1=$_POST[NBRE1];
             $nbre2=$_POST[NBRE2];
             $op=$_POST['op'];
-           $resultat=calculatrice($nbre1,$nbre2,$op);
+           $resultat = calculatrice($nbre1,$nbre2,$op);
 
         }
 
 
 
     }else{
-        $errors[]="Veuillez cliquer sur le Bouton";
+        $errors["envoie"] = "Veuillez cliquer sur le Bouton";
+
+
     }
 ?>
 
@@ -53,16 +102,56 @@ $resultat="";
                 <div class="col-3"></div>
                 <div class="col-6 pl-5">
                 <form action="" method="post">
+    
+                        <div class="form-group">
+                            
+                            <?php if(isset($errors["op"])){ ?>
+
+                            <div class="alert alert-danger" role="alert">
+                                    <span>Erreur: <span><?=$errors["op"]?></span></span>
+                            </div>
+                            <?php } ?>
+                            
+                            <label for="">Nombre1</label>
+
+                            <div class="row align-items-center">
+                                  <div class="col-md-6">
+                                        <input type="text" class="form-control" name="nbre1" id="" value="<?=  getValuePOST("nbre1")?>" aria-describedby="helpId" placeholder="">
+                                  </div>
+                                  <div class="col-md-6">
+
+                                        <?php    if(isset($errors["nbre1"])){  ?>
+
+                                        <div class="alert alert-danger mb-0" role="alert">
+                                            <span>Erreur: <span><?= $errors["nbre1"] ?></span></span>
+                                        </div>
+
+                                        <?php } ?>
+                                  </div>
+                            </div>
+                        
+                        </div>
+
 
                         <div class="form-group">
-                        <label for="">Nombre1</label>
-                        <input type="text" class="form-control" name="nbre1" id="" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Help text</small>
-                        </div>
-                        <div class="form-group">
-                        <label for="">Nombre2</label>
-                        <input type="text" class="form-control" name="nbre2" id="" aria-describedby="helpId" placeholder="">
-                        <small id="helpId" class="form-text text-muted">Help text</small>
+                        
+                            <label for="">Nombre2</label>
+
+                            <div class="row align-items-center">
+                                  <div class="col-md-6">
+                                      <input type="text" class="form-control" name="nbre2" id="" value="<?=  getValuePOST("nbre2")?>" aria-describedby="helpId" placeholder="">
+                                  </div>
+                                  <div class="col-md-6">
+
+                                      <?php    if(isset($errors["nbre2"])){  ?>
+                                      <div class="alert alert-danger mb-0" role="alert">
+                                            <span>Erreur: <span><?= $errors["nbre2"] ?></span></span>
+                                      </div>
+                                      <?php  }   ?>
+                                  
+                                  </div>
+                            </div>
+                        
                         </div>
 
                         <div class="form-group">
@@ -87,13 +176,22 @@ $resultat="";
       </div>
   </div>
 
+
+
+<?php if($resultat) {?>
+
 <div class="card text-left ml-5">
 
   <div class="card-body">
     <h4 class="card-title">Resultat:<?=$resultat;?> </h4>
 
-  </div>
+  </div> 
 </div>
+
+<?php } ?>
+
+
+
 
 
 

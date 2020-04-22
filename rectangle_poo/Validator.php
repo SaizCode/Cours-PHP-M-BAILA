@@ -12,45 +12,50 @@ class Validator {
     }
 
  // Longueur et Largueur doivent etre numeric(entier,reel)
- public function is_number($nombre,$key,$errorMessage="Veuiller saisir un nombre"){
-    if(!is_numeric($nombre)){
-        $this->errors[$key]= $errorMessage;
+    public function is_number($nombre,$key,$errorMessage="Veuiller saisir un nombre"){
+
+        if(!is_numeric($nombre)){
+            $this->errors[$key]= $errorMessage;
+        }
     }
-}
 
-/*
-  Longueur positif
-  Largeur positif
-*/
-public function is_positif($nombre,$key,$errorMessage="Veuiller saisir un nombre positif"){
-                   $this->is_number($nombre,$key);
-                   if($this->is_valid()){
-                      if($nombre<=0){
-                        $this->errors[$key]= $errorMessage;
-                      }
-                    }
-                   
-}
+    /*
+    Longueur positif
+    Largeur positif
+    */
+    public function is_positif($nombre,$key,$errorMessage="Veuiller saisir un nombre positif"){
 
-/**
-*   Longueur> Largeur
-*/
-//compare()
-//Nbre1 =>plus grand
-//Nbre2 =>plus petit
-public function compare($nbre1,$nbre2,$key1,$key2,$errorMessage="Longueur doit superieur à la Largeur"){
-    $this->is_positif($nbre1,$key1);
-    $this->is_positif($nbre2,$key2);
-   if($this->is_valid()){
-           if($nbre1<=$nbre2){
-              $this->errors['all']=$errorMessage;
-           }
-   }
+                    $this->is_number($nombre,$key);
+                    if($this->is_valid()){
+                        if($nombre<=0){
+                            $this->errors[$key]= $errorMessage;
+                        }
+                        }
+                    
+    }
 
-}
+    /**
+    *   Longueur> Largeur
+    */
+    //compare()
+    //Nbre1 =>plus grand
+    //Nbre2 =>plus petit
+    public function compare($nbre1,$nbre2,$key1,$key2,$errorMessage="Longueur doit superieur à la Largeur"){
+
+        $this->is_positif($nbre1,$key1);
+        $this->is_positif($nbre2,$key2);
+        if($this->is_valid()){
+                if($nbre1<=$nbre2){
+                    $this->errors['all']=$errorMessage;
+                }
+        }
+
+    }
 
 public function  is_empty($nbre,$key,$sms=null){
+
     if(empty($nbre)){
+
         if($sms==null){
             $sms="Le Nombre  est Obligatoire";
         }
@@ -60,11 +65,33 @@ public function  is_empty($nbre,$key,$sms=null){
     }
 //Expressions Régulières
     public function  is_email($valeur,$key,$sms=null){
+
+        if(!preg_match("#^[a-z0-9._-]+@[a-z0-9\._-]{2,}\.[a-z]{2,4}$#", $valeur, $match)){
+
+            if(!$sms){
+
+                $sms = "Il semble que ce mail soit incorrect";
+            }
+
+            $sms += " " + $match[0];
+            $this->errors[$key] = $sms;
+        }
     
     }
 
     //9chiffres , commence par 77,78,75,76,70
     public function  is_telephone($valeur,$key,$sms=null){
+
+        if(!preg_match("#^([+|00]221)?[ -]?(33|77|76){1}[ -]?[0-9]{3}[ -]?([0-9]{2}[ -]?){2}$#", $valeur, $match)){
+
+            if(!$sms){
+
+                $sms = "Il semble que ce numero de telephone soit incorrect";
+            }
+
+            $sms += " " + $match[0];
+            $this->errors[$key] = $sms;
+        }
     
     }
 

@@ -14,7 +14,7 @@
 
                 break;
         default:
-            # code...
+                return;
             break;
     }
     return $resultat;

@@ -101,7 +101,7 @@ $largeur="";
  ?>
 
 <!doctype html>
-<html lang="en">
+<html lang="fr">
   <head>
     <title>Title</title>
     <!-- Required meta tags -->
@@ -185,17 +185,23 @@ $largeur="";
             </thead>
             <tbody>
             <?php
-                foreach ($_SESSION as  $resultat) {
+                foreach ($_SESSION as $resultat) {
 
-            ?>
+                   
+                    if(is_array($resultat)){
+
+                        foreach ($resultat as  $keyResultat) {
+
+                    } ?>     
                 <tr>
-                    <td scope="row"><?=$resultat["demi_perimetre"]?></td>
-                    <td><?=$resultat["perimetre"]?></td>
-                    <td><?=$resultat["surface"]?></td>
-                    <td><?=$resultat["diagonale"]?></td>
+                   
+                    <td scope="row"><?=$keyResultat?></td>
+                    <td><?= $keyResultat  ?></td>
+                    <td><?= $keyResultat  ?></td>
+                    <td><?= $keyResultat  ?></td>
                 </tr>
 
-                <?php
+                    <?php }
                 }
                 ?>
 
